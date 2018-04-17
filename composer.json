@@ -1,0 +1,24 @@
+{
+     "autoload": {
+        "psr-4": {
+            "Nameless\\":"src/",
+            "Nameless\\Tests\\": "src/tests/",
+            "Nameless\\Core\\": "src/Core/",
+            "Nameless\\Core\\Entity\\": "src/Core/Entity",
+            "Nameless\\Core\\Entity\\EntityOne\\": "src/Core/Entity/EntityOne"
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://andain:Andain5546.,@satis.andain.cl"
+        }
+    ],
+    "require-dev": {
+        "pagatodo/unit-testing": "^2.2.0",
+        "pagatodo/hhvm-token-stream": "^1.0"
+    },
+    "require": {
+        "pagatodo/typings-phpunit": "^1.1"
+    }
+}
