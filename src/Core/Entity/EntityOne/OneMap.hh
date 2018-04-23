@@ -45,4 +45,15 @@ class OneMap
     {
         $this->websense = $WebS;
     }
+    public function analize() : string
+    {
+        $req = $this->websense->getRequest();
+        if ($req === null) {
+            $result = 'silence...';
+        }
+        $calc = new Calculator();
+        $calc->setData($req);
+        $result = $calc->getConclusion();
+        return $result;
+    }
 }

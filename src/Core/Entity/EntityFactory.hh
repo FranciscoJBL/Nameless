@@ -5,7 +5,7 @@ namespace Nameless\Core\Entity;
 use Nameless\Core\Entity\EntityOne\EntityOne;
 use Nameless\Core\Entity\EntityOne\OneMap;
 use Nameless\Core\Entity\Entity;
-//A factory class
+//A factory class, and this makes the role of a singleton too
 class EntityFactory
 {
     public static ?Entity $entity = null;

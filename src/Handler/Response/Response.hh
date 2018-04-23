@@ -10,6 +10,15 @@ class Response
 
     public function __construct(?Entity $entity)
     {
-
+        $this->entity = $entity;
+    }
+    public function getResponse() : string
+    {
+        if ($this->entity !== null) {
+            return $this->entity
+                ->getMap()
+                ->analize();
+        }
+        return 'something went really bad...';
     }
 }

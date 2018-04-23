@@ -23,9 +23,6 @@ class Handler
             $this->factory->getEntity('EntityOne'),
             $this->request
         );
-
-        //in the future, we will send request to our request object,
-        //and make funny things with that :D
     }
 
     public function generateResponse() :void
@@ -33,6 +30,8 @@ class Handler
         $response = new Response(
             $this->factory->getEntity('EntityOne'),
         );
+        $this->response = $response->getResponse();
+
     }
 
     public function getResponse() : ?string
