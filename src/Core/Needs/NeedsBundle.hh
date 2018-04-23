@@ -9,13 +9,13 @@ use Nameless\Core\Needs\Especific\Success as Need;
 
 class NeedsBundle
 {
-    private Need $need;
+    private ?Need $need;
     //we register our needs
     public function addNeeds(Need $need) : void
     {
         $this->need = $need;
     }
-    public function getNeeds(Need $need) : Need
+    public function getNeeds(Need $need) : ?Need
     {
         return $this->need;
     }

@@ -1,4 +1,4 @@
-<?hh //strict
+<?hh
 
 namespace Nameless\Core\Test;
 
@@ -9,16 +9,7 @@ use Nameless\Core\Entity\EntityOne\EntityOne as EntityOne;
 
 class EntityTemplateTest extends TestCase
 {
-    public function testBorn(): void
-    {
-        $result = 'born';
-        $map = new Map();
-        $template = new EntityOne($map);
-        $this->assertEquals(
-            $result,
-            $template->born()
-        );
-    }
+
     public function testDie(): void
     {
         $map = new Map();

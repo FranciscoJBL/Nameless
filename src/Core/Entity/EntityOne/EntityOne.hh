@@ -2,14 +2,15 @@
 
 namespace Nameless\Core\Entity\EntityOne;
 
-use Nameless\Core\Entity\Entity as Entity;
 use Nameless\Core\Entity\EntityTemplate as Template;
+use Nameless\Core\Entity\EntityOne\OneMap;
 
 class EntityOne extends Template
 {
-    public function __construct($map) : void
+
+    public function __construct(OneMap $map) : void
     {
         $this->map = $map;
-        $this->born();
+        $this->needs = ($this->map->getNeeds());
     }
 }

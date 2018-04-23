@@ -4,14 +4,25 @@ namespace Nameless\Core\Entity;
 
 use Nameless\Core\Entity\EntityOne\EntityOne;
 use Nameless\Core\Entity\EntityOne\OneMap;
-//A factory class to give life :)
+use Nameless\Core\Entity\Entity;
+//A factory class
 class EntityFactory
 {
-    public function createNewborn($type) : Entity
+    public static ?Entity $entity = null;
+
+    public function createNewborn(string $type) : ?Entity
     {
         if ($type == 'EntityOne') {
-            $entity = new  EntityOne(new OneMap());
-            return $entity;
+            self::$entity = new EntityOne(new OneMap());
         }
+
+        return self::$entity;
+    }
+    public function getEntity(string $type) : ?Entity
+    {
+        if (self::$entity === null) {
+            $this->createNewborn($type);
+        }
+        return self::$entity;
     }
 }

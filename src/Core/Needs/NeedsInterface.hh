@@ -5,9 +5,9 @@ namespace Nameless\Core\Needs;
 //a common interface for any Need
 interface NeedsInterface
 {
-    public function fullfill(int $range):int;
+    public function fullfill(float $range):float;
     public function drop() : void;
-    public function adverseEfect() : int;
+    public function adverseEfect() : float;
 }
 
 

@@ -6,18 +6,19 @@ use Nameless\Core\Needs\NeedsInterface;
  * want him to do, so, if you don't want to make it suffer, please don't
  * try to make him do impossible things :(
 */
-const TYPE = 1;
+const int TYPE = 1;
 class Success implements NeedsInterface
 {
-    public int $impact;
-    public int $satisfaction;
+    public float $impact;
+    public float $satisfaction;
 
-    public function  __construct(int $impact) : void
+    public function  __construct(float $impact) : void
     {
         $this->impact = $impact;
+        $this->satisfaction = 1.0;
     }
 
-    public function fullfill(int $range) : int
+    public function fullfill(float $range) : float
     {
         $this->impact = ($this->impact * 2) / $range;
         $this->satisfaction = ($this->satisfaction + $range);
@@ -30,8 +31,8 @@ class Success implements NeedsInterface
         $this->impact += $this->impact/2;
     }
 
-    public function adverseEfect() : int
+    public function adverseEfect() : float
     {
-        return 10;
+        return 10.0;
     }
 }
