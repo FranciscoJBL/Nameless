@@ -3,9 +3,9 @@ namespace Nameless\Core\Needs\Especific;
 
 use Nameless\Core\Needs\NeedsInterface;
 /* The initial need of our entity its just success in the work that we
- * want him to do, so, if you don't want to make it suffer, please don't
- * try to make him do impossible things :(
-*/
+ * ask him to do so, if you don't want to make him suffer, please don't
+ * try to overload him :(
+ */
 const int TYPE = 1;
 class Success implements NeedsInterface
 {

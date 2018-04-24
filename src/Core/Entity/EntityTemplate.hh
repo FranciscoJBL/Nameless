@@ -13,9 +13,9 @@ abstract class EntityTemplate implements Entity
     public Map $map;
     protected ?Needs $needs;
 
-    public function die() :string
+    public function die() : bool
     {
-        return 'die';
+        exit();
     }
 
     public function replicate() :string
