@@ -2,6 +2,7 @@
 
 namespace Nameless\Core\Entity\EntityOne;
 
+use Nameless\Core\Entity\EntityOne\EntityOneCalculator\Calculator;
 use Nameless\Core\Senses\WebSense as WebS;
 use Nameless\Core\Needs\NeedsBundle as Needs;
 use Nameless\Core\Needs\Especific\Success as Need;
