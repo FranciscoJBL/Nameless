@@ -9,7 +9,7 @@ use Nameless\Core\Entity\EntityFactory;
 class Handler
 {
     private array<string> $request;
-    public ?string $response;
+    public ?array<float> $response;
     private EntityFactory $factory;
     public function __construct(array<string> $request)
     {
@@ -34,7 +34,7 @@ class Handler
 
     }
 
-    public function getResponse() : ?string
+    public function getResponse() : ?array<float>
     {
         return $this->response;
     }

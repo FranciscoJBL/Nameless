@@ -12,13 +12,14 @@ class Response
     {
         $this->entity = $entity;
     }
-    public function getResponse() : string
+    public function getResponse() : array<float>
     {
         if ($this->entity !== null) {
             return $this->entity
                 ->getMap()
                 ->analize();
         }
-        return 'something went really bad...';
+        return [0.0];
+        //return 'something went really bad...';
     }
 }

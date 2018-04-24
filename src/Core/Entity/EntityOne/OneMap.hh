@@ -46,7 +46,7 @@ class OneMap
     {
         $this->websense = $WebS;
     }
-    public function analize() : string
+    public function analize() : array<float>
     {
         $req = $this->websense->getRequest();
         if ($req === null) {

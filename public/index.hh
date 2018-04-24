@@ -16,6 +16,7 @@ if ($_REQUEST) {
 $handler = new Handler($request);
 $handler->processRequest();
 $handler->generateResponse();
-echo $handler->getResponse();
+$handler->getResponse();
+//print_r($handler->getResponse());
 
 

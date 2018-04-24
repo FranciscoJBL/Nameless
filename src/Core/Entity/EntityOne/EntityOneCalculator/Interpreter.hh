@@ -13,8 +13,8 @@ class Interpreter
     {
         return [10.0, 1.2, 2.1, 4.2];
     }
-    public function getReadableData(array<float> $data) : string
+    public function getReadableData(array<float> $data) : array<float>
     {
-        return strval($data);
+        return ($data);
     }
 }
