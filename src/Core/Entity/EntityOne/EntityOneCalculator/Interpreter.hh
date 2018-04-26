@@ -6,10 +6,11 @@ use Nameless\Core\Entity\EntityOne\EntityOneCalculator\Codes\Codes;
 
 class Interpreter
 {
-    private ?array<array<string>> $data;
+    private ?array<string> $data;
     private array<?float> $nativeData = [];
     private ?Codes $codes;
-    public function __construct(?array<array<string>> $data)
+
+    public function setData(?array<string> $data) :void
     {
         $this->data = $data;
     }
@@ -17,9 +18,7 @@ class Interpreter
     {
         if ($this->data !== null) {
             foreach ($this->data as $register) {
-                foreach ($register as $result) {
-                    $this->nativeData[] = $this->parseData($result);
-                }
+                $this->nativeData[] = $this->parseData($register);
             }
         } else {
             $this->nativeData[] = null;
@@ -42,8 +41,12 @@ class Interpreter
         $this->codes = new Codes();
         return $this->codes->getCode($value);
     }
-    public function getReadableData(array<float> $data) : array<float>
+    public function getReadableData(float $data) : string
     {
-        return $data;
+        if ($this->codes === null) {
+            $this->codes = new Codes();
+        }
+        return $this->codes->getValue($data);
+
     }
 }

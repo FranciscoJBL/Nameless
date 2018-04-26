@@ -46,19 +46,18 @@ class OneMap
     {
         $this->websense = $WebS;
     }
-    public function analize() : array<float>
+    public function analize() : array<string>
     {
         $this->websense->setRequest(['a']);
         $req =  $this->websense->getRequest();
         if ($req === null) {
-            $result = 'silence...';
+            $result = [''];
         } else{
             $calc = new Calculator();
             $data = $req;
             $calc->setData($req);
             $result = $calc->getConclusion();
         }
-
-        return [0.0];
+        return $result;
     }
 }

@@ -25,6 +25,8 @@ class Response
     }
     public function makeResponse(array<mixed> $result) :void
     {
+        print_r("holi\n");
         print_r($result);
+        print_r("\n");
     }
 }

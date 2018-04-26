@@ -4,10 +4,11 @@ namespace Nameless\Core\Entity\EntityOne\EntityOneCalculator;
 
 use Nameless\Core\Entity\EntityOne\EntityOneCalculator\Interpreter;
 use Nameless\Core\Entity\EntityOne\EntityOneCalculator\Concepts;
+use Nameless\Core\Entity\EntityOne\EntityOneCalculator\Codes\Codes;
 
 class Calculator
 {
-    private ?array<array<string>> $data;
+    private array<array<string>> $data = [];
     private ?DataSet $dataset;
     private array<float> $hiddenLayer = [];
     private array<float> $inputLayer = [];
@@ -18,51 +19,51 @@ class Calculator
     private float $variation = 0.0;
     private float $result = 0.0;
 
-    public function setData(?array<array<string>> $data) : void
+    public function setData(array<array<string>> $data) : void
     {
         $this->data = $data;
     }
 
-    public function getConclusion() : array<float>
+    public function getConclusion() : array<string>
     {
-        $interpreter = new Interpreter($this->data);
+
+        $interpreter = new Interpreter();
         $this->dataset = new DataSet();
         $concept = new Concepts($this->dataset);
+        $result = [];
+        foreach ($this->data as $row) {
+            $interpreter->setData($row);
+            $result[] = $interpreter->getReadableData(
+                $this->inputData(
+                    $interpreter->getNativeData()
+                )
+            );
+        }
 
-        return $interpreter->getReadableData(
-            $concept->getConcept(
-                $this->inputData($interpreter->getNativeData())
-            )
-        );
+        return $result;
 
         // 'its supposed that i have to think about that...';
     }
 
     private function inputData(array<?float> $inputs) : float
     {
-        $testDataSet = [];
-        if ($this->dataset !== null) {
-            $testDataSet = $this->dataset->getData();
-        }
 
-        return $this->train($testDataSet);
+        return $this->train($inputs);
     }
 
-    public function train(array $testDataSet) : float
+    public function train(array $DataSet) : float
     {
         $this->adjustWeights();
         $index = 0;
         $i = 0;
         $output = 0.0;
         while ($i < 1) {
-            foreach ($testDataSet as $data) {
-                //propagation
-                $output = $this->propagation($data);
-                $this->adjustWeights();
-                $this->hiddenLayer = [0.1,0.1,0.1];
-                $this->result = 0.0;
-                $i++;
-            }
+            //propagation
+            $output = $this->propagation($DataSet);
+            $this->adjustWeights();
+            $this->hiddenLayer = [0.1,0.1,0.1];
+            $this->result = 0.0;
+            $i++;
         }
         return $output;
     }
@@ -97,8 +98,7 @@ class Calculator
     {
 
             $result = 0.0;
-            $codes = new Codes();
-            $espectedResult = $codes->getCode($data[4]);
+            $espectedResult = $data[4];
             //input
             $this->inputLayer[0] = $data[0];
             $this->inputLayer[1] = $data[1];
