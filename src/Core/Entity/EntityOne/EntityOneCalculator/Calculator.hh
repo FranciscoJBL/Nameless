@@ -7,8 +7,8 @@ use Nameless\Core\Entity\EntityOne\EntityOneCalculator\Concepts;
 
 class Calculator
 {
-    private ?array<string> $data;
-
+    private ?array<array<string>> $data;
+    private ?DataSet $dataset;
     private array<float> $hiddenLayer = [];
     private array<float> $inputLayer = [];
     private array<float> $bias = [];
@@ -18,7 +18,7 @@ class Calculator
     private float $variation = 0.0;
     private float $result = 0.0;
 
-    public function setData(?array<string> $data) : void
+    public function setData(?array<array<string>> $data) : void
     {
         $this->data = $data;
     }
@@ -26,7 +26,8 @@ class Calculator
     public function getConclusion() : array<float>
     {
         $interpreter = new Interpreter($this->data);
-        $concept = new Concepts();
+        $this->dataset = new DataSet();
+        $concept = new Concepts($this->dataset);
 
         return $interpreter->getReadableData(
             $concept->getConcept(
@@ -37,24 +38,26 @@ class Calculator
         // 'its supposed that i have to think about that...';
     }
 
-    private function inputData(array<float> $inputs) : array<float>
+    private function inputData(array<?float> $inputs) : float
     {
-        $dataset = new DataSet();
-        $testDataSet = $dataset->getData();
+        $testDataSet = [];
+        if ($this->dataset !== null) {
+            $testDataSet = $this->dataset->getData();
+        }
 
         return $this->train($testDataSet);
     }
 
-    public function train($dataset) : array<float>
+    public function train(array $testDataSet) : float
     {
         $this->adjustWeights();
         $index = 0;
         $i = 0;
-        $output = [];
+        $output = 0.0;
         while ($i < 1) {
-            foreach ($dataset as $data) {
+            foreach ($testDataSet as $data) {
                 //propagation
-                $output[] = $this->propagation($data);
+                $output = $this->propagation($data);
                 $this->adjustWeights();
                 $this->hiddenLayer = [0.1,0.1,0.1];
                 $this->result = 0.0;
@@ -90,16 +93,12 @@ class Calculator
         }
     }
 
-    private function propagation(array<float> $data) : float
+    private function propagation(array $data) : float
     {
-            $result = 0.0;
-            $translation = [
-                'Iris-setosa' => 1.0,
-                'Iris-versicolor'=> 2.0,
-                'Iris-virginica' => 3.0,
-            ];
-            $espectedResult = $translation[$data[4]];
 
+            $result = 0.0;
+            $codes = new Codes();
+            $espectedResult = $codes->getCode($data[4]);
             //input
             $this->inputLayer[0] = $data[0];
             $this->inputLayer[1] = $data[1];
@@ -121,16 +120,6 @@ class Calculator
             }
             $this->result = round($this->result);
             $this->variation = round($this->variation, 1);
-            $translation = [
-                '1' => 'Iris-setosa',
-                '2' => 'Iris-versicolor',
-                '3' => 'Iris-virginica'
-            ];
-
-            if (array_key_exists(strval($this->result), $translation)) {
-                print_r($translation[$this->result]);
-                print_r("\n");
-            }
             return $this->result;
     }
 }

@@ -11,6 +11,7 @@ class Handler
     private array<string> $request;
     public ?array<float> $response;
     private EntityFactory $factory;
+
     public function __construct(array<string> $request)
     {
         $this->factory = new EntityFactory();

@@ -3,7 +3,6 @@
 use Nameless\Handler\Handler;
 
 require '../vendor/autoload.php';
-
 $request = [];
 
 if ($_REQUEST) {
@@ -12,6 +11,7 @@ if ($_REQUEST) {
     unset($argv[0]);
     $request = $argv;
 }
+
 
 $handler = new Handler($request);
 $handler->processRequest();

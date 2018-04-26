@@ -1,20 +1,23 @@
 <?hh //strict
 
-namespace Nameless\Core\Senses
-;
+namespace Nameless\Core\Senses;
 
+use Nameless\Core\Entity\EntityOne\EntityOneCalculator\DataSet;
 class WebSense
 {
-    public ?array<string> $request;
+    public ?DataSet $request;
     public ?array<string> $response;
 
     public function setRequest(array<string> $request) : void
     {
-        $this->request = $request;
+        $this->request = new DataSet();
     }
-    public function getRequest() : ?array<string>
+    public function getRequest() : ?array<array<string>>
     {
-        return $this->request;
+        if($this->request === null) {
+            return null;
+        }
+        return $this->request->getData();
     }
     public function setResponse(array<string> $response) : void
     {

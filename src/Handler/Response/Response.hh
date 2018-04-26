@@ -15,11 +15,16 @@ class Response
     public function getResponse() : array<float>
     {
         if ($this->entity !== null) {
-            return $this->entity
-                ->getMap()
-                ->analize();
+            $this->makeResponse(
+                $this->entity
+                    ->getMap()
+                    ->analize()
+            );
         }
         return [0.0];
-        //return 'something went really bad...';
+    }
+    public function makeResponse(array<mixed> $result) :void
+    {
+        print_r($result);
     }
 }
