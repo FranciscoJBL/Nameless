@@ -19,6 +19,7 @@
         "pagatodo/hhvm-token-stream": "^1.0"
     },
     "require": {
+        "illuminate/database": "^5.2 <5.4.0 || ^5.4.1",
         "pagatodo/typings-phpunit": "^1.1"
     }
 }
