@@ -42,17 +42,20 @@ class Train
                 $response [] = $interpreter->getReadableData(
                     $this->result
                 );
-                $range = 450.0;
-                if($this->variation < $range && $this->variation > -$range) {
-                    print_r($this->variation);
-                    print_r("\n");
+                $maxRange = 10.0;
+                $minRange = -10.0;
+                if($this->variation < $maxRange && $this->variation > $minRange) {
                     $i++;
+                    print_r($this->variation);
+                    print_r(" ");
+                    print_r($i);
+                    print_r("\n");
                 } else {
+                    $i = 0;
                     $this->adjustWeights();
                 }
                 $this->result = 0.0;
             }
-            print_r("\n");
         }
         print_r("w1 :");
         print_r("\n");
@@ -76,20 +79,22 @@ class Train
     }
     private function generateWeights() : void
     {
-        for ($x = 0;$x < 12;$x++) { //w1
+        for ($x = 0;$x < 32;$x++) { //w1
             $this->w1[$x] = floatval(rand(1, 10)) / 10.0;
         }
         $x = 0;
-        for ($x = 0;$x < 3;$x++) {//w2, bias
+        for ($x = 0;$x < 8;$x++) {//w2, bias
             $this->bias[$x] = floatval(rand(0, 1));
             if ($this->bias == 0.0) {
                 $x++;
             }
             $this->w2[$x] = floatval(rand(1, 10)) / 10.0;
         }
-        if ($x === 3) {
+        if ($x === 8) {
             $this->bias[0] = 1.0;
             $this->bias[2] = 1.0;
+            $this->bias[4] = 1.0;
+            $this->bias[6] = 1.0;
         }
     }
     private function setInputLayer(array<float> $inputLayer) :void
@@ -98,9 +103,9 @@ class Train
     }
     private function propagation() : void
     {
-        for ($i= 0;$i < 3;$i++) {
+        for ($i= 0;$i < 8;$i++) {
            for ($x= 0;$x < 4;$x++) {
-                for ($z= 0;$z < 12;$z++) {
+                for ($z= 0;$z < 32;$z++) {
                     $InputW1 = $this->inputLayer[$x] * $this->w1[$z];
                     $this->hiddenLayer[$i] += $InputW1 * $this->bias[$i];
                 }
@@ -108,20 +113,24 @@ class Train
         }
 
         //output
-        for ($i= 0;$i < 3;$i++) {
+        for ($i= 0;$i < 8;$i++) {
             $this->result += round(($this->hiddenLayer[$i]*$this->w2[$i]), 1);
         }
         $this->variation = $this->espectedResult - $this->result;
     }
     private function adjustWeights() :void
     {
-        if  ($this->variation !== 0.0 && $this->result  !== 0.0) {
-            for ($x = 0;$x < 12;$x++) {
-                $this->w1[$x] += round((($this->result * $this->w1[$x]) / $this->variation), 3);
+        if (
+            $this->variation >= 1.0
+            || $this->variation <= -1.0
+            && $this->result  !== 0.0
+        ) {
+            for ($x = 0;$x < 32;$x++) {
+                $this->w1[$x] += round($this->w1[$x] * ($this->variation/$this->result), 3);
             }
 
-            for ($x = 0;$x < 3;$x++) {//w2
-                $this->w2[$x] += round((($this->result * $this->w2[$x]) / $this->variation), 3);
+            for ($x = 0;$x < 8;$x++) {//w2
+                $this->w2[$x] += round($this->w2[$x] * ($this->variation/$this->result), 3);
             }
         }
     }
