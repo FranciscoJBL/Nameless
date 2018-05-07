@@ -4,6 +4,7 @@ namespace Nameless\Core\Entity\EntityOne\EntityOneCalculator\Train;
 
 use Nameless\Core\Entity\EntityOne\EntityOneCalculator\DataSet;
 use Nameless\Core\Entity\EntityOne\EntityOneCalculator\Interpreter;
+use Nameless\Core\Entity\EntityOne\EntityOneCalculator\Concepts;
 
 class Train
 {
@@ -20,6 +21,7 @@ class Train
     {
 
     }
+
     public function makeTrain() : array<string>
     {
         $dataSet = new DataSet();
@@ -28,55 +30,40 @@ class Train
         $response = [];
         $this->generateWeights();
         $i = 0;
-        print_r(count($data));
-        while ($i < (count($data) - count($data)/10)) { // we espect 90% of assert
+        while ($i < count($data)) { // we espect 90% of assert
             $i = 0;
             foreach ($data as $row) {
+                if ($this->variation > 1000000) {
+                    //i dont like recreating the values, but it seems necessary
+                    //to avoid some weird stuff in some cases
+                    //where the weights become crazy
+                    $this->generateWeights();
+                }
                 $interpreter->setData($row);
                 $set = $interpreter->getNativeData();
                 $this->espectedResult = $set[4];
                 unset($set[4]);
                 $this->setInputLayer($set);
                 $this->propagation();
-
-                $response [] = $interpreter->getReadableData(
-                    $this->result
-                );
-                $maxRange = 10.0;
-                $minRange = -10.0;
-                if($this->variation < $maxRange && $this->variation > $minRange) {
+                $maxRange = 50.0;
+                $minRange = -50.0;
+                if(
+                    $this->variation < $maxRange
+                    && $this->variation > $minRange
+                ) {
                     $i++;
-                    print_r($this->variation);
-                    print_r(" ");
                     print_r($i);
                     print_r("\n");
                 } else {
-                    $i = 0;
                     $this->adjustWeights();
                 }
-                $this->result = 0.0;
+                print_r($this->variation);
+                print_r("\n");
             }
         }
-        print_r("w1 :");
-        print_r("\n");
-        print_r($this->w1);
-        print_r("\n");
-        print_r("w2 :");
-        print_r("\n");
-        print_r($this->w2);
-        print_r("\n");
-        print_r("bias :");
-        print_r("\n");
-        print_r($this->bias);
-        print_r("\n");
-        exit();
-        $this->setConcept();
-        return $response;
+        return ["terminé :D \n"];
     }
-    private function setConcept() :void
-    {
 
-    }
     private function generateWeights() : void
     {
         for ($x = 0;$x < 32;$x++) { //w1
@@ -85,22 +72,15 @@ class Train
         $x = 0;
         for ($x = 0;$x < 8;$x++) {//w2, bias
             $this->bias[$x] = floatval(rand(0, 1));
-            if ($this->bias == 0.0) {
-                $x++;
-            }
             $this->w2[$x] = floatval(rand(1, 10)) / 10.0;
         }
-        if ($x === 8) {
-            $this->bias[0] = 1.0;
-            $this->bias[2] = 1.0;
-            $this->bias[4] = 1.0;
-            $this->bias[6] = 1.0;
-        }
     }
+
     private function setInputLayer(array<float> $inputLayer) :void
     {
         $this->inputLayer = $inputLayer;
     }
+
     private function propagation() : void
     {
         for ($i= 0;$i < 8;$i++) {
@@ -111,27 +91,37 @@ class Train
                 }
             }
         }
-
         //output
+        $this->result= 0.0;
         for ($i= 0;$i < 8;$i++) {
             $this->result += round(($this->hiddenLayer[$i]*$this->w2[$i]), 1);
         }
-        $this->variation = $this->espectedResult - $this->result;
+        $this->variation = round(($this->espectedResult - $this->result), 3);
     }
+
     private function adjustWeights() :void
     {
         if (
             $this->variation >= 1.0
             || $this->variation <= -1.0
-            && $this->result  !== 0.0
         ) {
             for ($x = 0;$x < 32;$x++) {
-                $this->w1[$x] += round($this->w1[$x] * ($this->variation/$this->result), 3);
+                $this->w1[$x] += round(
+                    $this->variation / $this->espectedResult,
+                    6
+                ) * 1.1;
             }
 
             for ($x = 0;$x < 8;$x++) {//w2
-                $this->w2[$x] += round($this->w2[$x] * ($this->variation/$this->result), 3);
+                $this->w2[$x] += round(
+                    $this->variation / $this->espectedResult,
+                    6
+                ) * 1.1;
+                $this->bias[$x] = floatval(rand(0, 1));
             }
+
+            print_r("\n");
+            print_r("\n");
         }
     }
 }

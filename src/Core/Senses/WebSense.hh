@@ -3,6 +3,8 @@
 namespace Nameless\Core\Senses;
 
 use Nameless\Core\Entity\EntityOne\EntityOneCalculator\DataSet;
+
+
 class WebSense
 {
     public ?DataSet $request;

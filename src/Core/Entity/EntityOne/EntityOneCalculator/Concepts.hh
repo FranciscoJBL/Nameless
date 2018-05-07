@@ -5,23 +5,43 @@ namespace Nameless\Core\Entity\EntityOne\EntityOneCalculator;
 class Concepts
 {
     public float $concept = 0.0;
-    private ?DataSet $dataset;
+    private string $dataFolder = '../src/Core/Entity/EntityOne/EntityOneCalculator/Data/';
 
-    public function __construct(DataSet $dataset) {
-        $this->dataset = $dataset;
-    }
-    public function getConcept(float $data) : float
+    public function __construct()
     {
-        $this->cleanConcept($data);
-        return $this->concept;
 
     }
-    public function addConcept(float $concept) : void
+    public function getMemorizedData() : array<array<string>>
     {
-        $this->concept = $concept;
+        $file = $this->dataFolder."1000.dat";
+        $outputFile = fopen($file, 'r');
+        $concept = fread($outputFile, filesize($file));
+        return json_decode($concept, true);
     }
-    public function cleanConcept(float $data) : float
+
+    public function getConcept() : Map<string,float>
     {
-        return $this->concept;
+        $file = $this->dataFolder."concept.dat";
+        $outputFile = fopen($file, 'r');
+        if(filesize($file) <= 0) {
+            return new Map(null);
+        }
+        $concept = fread($outputFile, filesize($file));
+
+        return new Map(json_decode($concept, true));
+    }
+
+    public function addConcept(string $concept, float $value) : void
+    {
+        $file = $this->dataFolder.'concept.dat';
+        $concepts = $this->getConcept();
+        $concepts[] = Pair{$concept, $value};
+        $outputFile = fopen($file, 'w');
+        fwrite($outputFile, json_encode($concepts));
+        /*
+        $file = $this->dataFolder.$concept.'.dat';
+        $outputFile = fopen($file, 'w');
+        fwrite($outputFile, json_encode($dataSet));
+        */
     }
 }
