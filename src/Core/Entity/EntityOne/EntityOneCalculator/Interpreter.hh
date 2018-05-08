@@ -18,23 +18,25 @@ class Interpreter
     public function getNativeData() : array<float>
     {
         if ($this->data !== null) {
+            $espectedResult = false;
             foreach ($this->data as $register) {
-                $this->nativeData[] = $this->parseData($register);
+                $partial = floatval($register);
+                if ($partial === 0.0) {
+                    $espectedResult = $this->parseData($register);
+                    continue;
+                }
+                $this->nativeData[] = $partial;
+            }
+            if (is_float($espectedResult)) {
+                $this->nativeData[] = $espectedResult;
             }
         }
         return $this->nativeData;
     }
 
-    public function parseData(?string $result) : float
+    public function parseData(string $result) : float
     {
-        if($result !== null) {
-            $partial = floatval($result);
-            if ($partial === 0.0){
-                $partial = $this->getCode($result);
-            }
-            return $partial;
-        }
-        return 0.0;
+        return $this->getCode($result);
     }
 
     private function getCode(string $value) : float

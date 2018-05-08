@@ -1,7 +1,7 @@
 <?hh
 
 use Nameless\Handler\Handler;
-use Nameless\Core\Entity\EntityOne\EntityOneCalculator\Concepts;
+use Nameless\Core\Entity\EntityOne\EntityOneCalculator\Network\Network;
 require '../vendor/autoload.php';
 $request = [];
 
@@ -11,6 +11,10 @@ if ($_REQUEST) {
     unset($argv[0]);
     $request = $argv;
 }
+
+$network = new Network([0.0, 0.0]);
+$network->generateWeights();
+exit();
 
 $handler = new Handler($request);
 $handler->processRequest();

@@ -5,16 +5,14 @@ namespace Nameless\Core\Entity\EntityOne\EntityOneCalculator\Train;
 use Nameless\Core\Entity\EntityOne\EntityOneCalculator\DataSet;
 use Nameless\Core\Entity\EntityOne\EntityOneCalculator\Interpreter;
 use Nameless\Core\Entity\EntityOne\EntityOneCalculator\Concepts;
+use Nameless\Core\Entity\EntityOne\EntityOneCalculator\Network\Network;
+
 
 class Train
 {
-    private array<float> $hiddenLayer = [];
-    private array<float> $inputLayer = [];
-    private array<float> $bias = [];
-    private array<float> $w1 = [];
-    private array<float> $w2 = [];
+    private ?Network $network;
+
     private float $espectedResult = 0.0;
-    private float $variation = 0.0;
     private float $result = 0.0;
 
     public function __construct() : void
@@ -41,7 +39,7 @@ class Train
                 }
                 $interpreter->setData($row);
                 $set = $interpreter->getNativeData();
-                $this->espectedResult = $set[4];
+                $this->espectedResult = $set[count($set)-1];
                 unset($set[4]);
                 $this->setInputLayer($set);
                 $this->propagation();
