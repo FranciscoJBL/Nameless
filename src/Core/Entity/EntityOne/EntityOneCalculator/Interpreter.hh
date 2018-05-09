@@ -7,7 +7,6 @@ use Nameless\Core\Entity\EntityOne\EntityOneCalculator\Codes\Codes;
 class Interpreter
 {
     private ?array<string> $data;
-    private array<float> $nativeData = [];
     private ?Codes $codes;
 
     public function setData(?array<string> $data) :void
@@ -19,19 +18,20 @@ class Interpreter
     {
         if ($this->data !== null) {
             $espectedResult = false;
+            $nativeData = [];
             foreach ($this->data as $register) {
                 $partial = floatval($register);
                 if ($partial === 0.0) {
                     $espectedResult = $this->parseData($register);
                     continue;
                 }
-                $this->nativeData[] = $partial;
+                $nativeData[] = $partial;
             }
             if (is_float($espectedResult)) {
-                $this->nativeData[] = $espectedResult;
+                $nativeData[] = $espectedResult;
             }
         }
-        return $this->nativeData;
+        return $nativeData;
     }
 
     public function parseData(string $result) : float

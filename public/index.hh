@@ -12,10 +12,6 @@ if ($_REQUEST) {
     $request = $argv;
 }
 
-$network = new Network([0.0, 0.0]);
-$network->generateWeights();
-exit();
-
 $handler = new Handler($request);
 $handler->processRequest();
 $handler->generateResponse();
